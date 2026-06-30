@@ -61,7 +61,7 @@ Open a second terminal:
 ```bash
 cd rare-client
 npm install             # install JavaScript dependencies
-npm start               # starts on http://localhost:3000
+npm run dev             # starts on http://localhost:3000
 ```
 
 The client expects the API at `http://localhost:8000` (hardcoded in `src/managers/api.js`). Both servers must be running at the same time.
