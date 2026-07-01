@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { getPostsByUser } from "../../managers/PostManager"
 import { getProfile } from "../../managers/UserManager"
+import { PostCard } from "../posts/PostCard"
 
 export const UserPostList = () => {
   const { userId } = useParams()
@@ -16,33 +17,19 @@ export const UserPostList = () => {
   return (
     <div className="container">
       <h2 className="title is-4 mt-4">
-        Posts by {profile ? profile.username : "..."}
+        Posts by {profile ? profile.full_name || profile.username : "..."}
       </h2>
-      <table className="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Published</th>
-          </tr>
-        </thead>
-        <tbody>
+      {posts.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <div className="columns is-multiline">
           {posts.map(post => (
-            <tr key={post.id}>
-              <td>
-                <Link to={`/posts/${post.id}`}>{post.title}</Link>
-              </td>
-              <td>{post.category ? post.category.label : "—"}</td>
-              <td>{post.publication_date}</td>
-            </tr>
+            <div key={post.id} className="column is-one-third-desktop is-half-tablet is-full-mobile">
+              <PostCard post={post} showAuthor={false} />
+            </div>
           ))}
-          {posts.length === 0 && (
-            <tr>
-              <td colSpan="3">No posts yet.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   )
 }
