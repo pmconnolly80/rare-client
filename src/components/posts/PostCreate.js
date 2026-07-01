@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import ReactMarkdown from "react-markdown"
 import { createPost, uploadPostImage } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
 
 export const PostCreate = () => {
   const [categories, setCategories] = useState([])
+  const [showPreview, setShowPreview] = useState(false)
+  const [previewContent, setPreviewContent] = useState('')
   const titleRef = useRef()
   const categoryRef = useRef()
   const fileRef = useRef()
@@ -64,9 +67,27 @@ export const PostCreate = () => {
         </div>
         <div className="field">
           <label className="label">Content</label>
-          <div className="control">
-            <textarea className="textarea" ref={contentRef} required />
+          <div className="tabs is-boxed mb-0">
+            <ul>
+              <li className={!showPreview ? "is-active" : ""}>
+                <a onClick={() => setShowPreview(false)}>Write</a>
+              </li>
+              <li className={showPreview ? "is-active" : ""}>
+                <a onClick={() => { setPreviewContent(contentRef.current.value); setShowPreview(true) }}>Preview</a>
+              </li>
+            </ul>
           </div>
+          <div className="control" style={{ display: showPreview ? "none" : "" }}>
+            <textarea className="textarea" ref={contentRef} required rows={12} />
+          </div>
+          {showPreview && (
+            <div className="content box" style={{ minHeight: "12rem" }}>
+              {previewContent
+                ? <ReactMarkdown>{previewContent}</ReactMarkdown>
+                : <p className="has-text-grey">Nothing to preview yet.</p>
+              }
+            </div>
+          )}
         </div>
         <div className="control">
           <button className="button is-primary" type="submit">Save</button>
