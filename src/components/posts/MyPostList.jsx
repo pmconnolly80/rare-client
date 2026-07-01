@@ -38,7 +38,11 @@ export const MyPostList = () => {
               <td>{post.user.username}</td>
               <td>{post.category ? post.category.label : "—"}</td>
               <td>{post.publication_date}</td>
-              <td>{post.approved ? "Yes" : "No"}</td>
+              <td>
+                {post.approved
+                  ? <span className="tag is-success">Approved</span>
+                  : <span className="tag is-warning">Pending</span>}
+              </td>
             </tr>
           ))}
         </tbody>
