@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { getMyPosts } from "../../managers/PostManager"
+import { PostCard } from "./PostCard"
 
 export const MyPostList = () => {
   const [posts, setPosts] = useState([])
@@ -12,30 +12,25 @@ export const MyPostList = () => {
   return (
     <div className="container">
       <h2 className="title is-4 mt-4">My Posts</h2>
-      <table className="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>Published</th>
-            <th>Approved</th>
-          </tr>
-        </thead>
-        <tbody>
+      {posts.length === 0 ? (
+        <p>You haven't written any posts yet.</p>
+      ) : (
+        <div className="columns is-multiline">
           {posts.map(post => (
-            <tr key={post.id}>
-              <td>
-                <Link to={`/posts/${post.id}`}>{post.title}</Link>
-              </td>
-              <td>{post.user.username}</td>
-              <td>{post.category ? post.category.label : "—"}</td>
-              <td>{post.publication_date}</td>
-              <td>{post.approved ? "Yes" : "No"}</td>
-            </tr>
+            <div key={post.id} className="column is-one-third-desktop is-half-tablet is-full-mobile">
+              <PostCard
+                post={post}
+                showAuthor={false}
+                statusTag={
+                  post.approved
+                    ? <span className="tag is-success">Approved</span>
+                    : <span className="tag is-warning">Pending</span>
+                }
+              />
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { getAllPosts } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
 import { getTags } from "../../managers/TagManager"
+import { PostCard } from "./PostCard"
 
 export const PostList = () => {
   const [posts, setPosts] = useState([])
@@ -24,7 +25,7 @@ export const PostList = () => {
   return (
     <div className="container">
       <h2 className="title is-4 mt-4">Posts</h2>
-      <div className="is-flex is-gap-4 mb-4" style={{ gap: "1rem" }}>
+      <div className="is-flex mb-4" style={{ gap: "1rem" }}>
         <div className="field">
           <div className="control">
             <div className="select">
@@ -50,28 +51,17 @@ export const PostList = () => {
           </div>
         </div>
       </div>
-      <table className="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>Published</th>
-          </tr>
-        </thead>
-        <tbody>
+      {filteredPosts.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <div className="columns is-multiline">
           {filteredPosts.map(post => (
-            <tr key={post.id}>
-              <td>
-                <Link to={`/posts/${post.id}`}>{post.title}</Link>
-              </td>
-              <td>{post.user.username}</td>
-              <td>{post.category ? post.category.label : "—"}</td>
-              <td>{post.publication_date}</td>
-            </tr>
+            <div key={post.id} className="column is-one-third-desktop is-half-tablet is-full-mobile">
+              <PostCard post={post} />
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   )
 }
