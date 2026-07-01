@@ -26,12 +26,13 @@ export const PostCreate = () => {
       content: contentRef.current.value,
     }).then(post => {
       const file = fileRef.current.files[0]
+      const destination = post.approved ? '/myposts' : '/myposts?created=true'
       if (file) {
         const formData = new FormData()
         formData.append("image", file)
-        uploadPostImage(post.id, formData).then(() => navigate(`/posts/${post.id}`))
+        uploadPostImage(post.id, formData).then(() => navigate(destination))
       } else {
-        navigate(`/posts/${post.id}`)
+        navigate(destination)
       }
     })
   }
